@@ -12,6 +12,41 @@
   <link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="../styles/musical.css" rel="stylesheet">
 
+  <script>
+    function checkBasicFileShare() {
+      // XXX: There is no straightforward API to do this.
+      // For now, assume that text/plain is supported everywhere.
+      const txt = new Blob(['Hello, world!'], { type: 'text/plain' });
+      // XXX: Blob support? https://github.com/w3c/web-share/issues/181
+      const file = new File([txt], "test.txt");
+      return navigator.canShare({ files: [file] });
+    }
+
+    async function webShare(filePath) {
+      let response = await fetch(filePath);
+      let data = await response.blob();
+      const file = new File(data, filePath, { type: "video/mp4" });
+
+      if (files) {
+        if (!navigator.canShare) {
+          alert('Warning: canShare is not supported. File sharing may not be supported at all.');
+        } else if (!checkBasicFileShare()) {
+          alert('Error: File sharing is not supported in this browser.');
+          return;
+        } else if (!navigator.canShare({ files: [file] })) {
+          alert('Error: share() does not support the given files');
+          alert(`File info: name - ${file.name}, size ${file.size}, type ${file.type}`);
+          return;
+        }
+      }
+      try {
+        await navigator.share({ files: [file] });
+      } catch (error) {
+        alert('Error sharing: ' + error);
+      }
+    }
+  </script>
+
   <style>
     .bd-placeholder-img {
       font-size: 1.125rem;
@@ -138,7 +173,8 @@
               <div class="row" style="justify-content: center; margin-bottom: 20px;">
                 <div class="col-md-3"
                   style="display: flex; flex-direction: column; justify-content: flex-end; text-decoration: none;">
-                  <a href="../assets/thechristmasblues/videos/1 - The Christmas Blues.mp4" download
+                  <a href="javascript:void(0);"
+                    onclick="webShare('../assets/thechristmasblues/videos/1 - The Christmas Blues.mp4')"
                     style="text-decoration: none; color: white;">
                     <h3>The Christmas Blues</h3>
                   </a>
