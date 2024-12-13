@@ -25,7 +25,7 @@
     async function webShare(filePath) {
       let response = await fetch(filePath);
       let data = await response.blob();
-      const file = new File(data, filePath, { type: "video/mp4" });
+      const file = new File([data], filePath, { type: "video/mp4" });
 
       if (files) {
         if (!navigator.canShare) {
