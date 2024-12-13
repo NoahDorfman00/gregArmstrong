@@ -27,7 +27,7 @@
       let data = await response.blob();
       const file = new File([data], filePath, { type: "video/mp4" });
 
-      if (files) {
+      if (file) {
         if (!navigator.canShare) {
           alert('Warning: canShare is not supported. File sharing may not be supported at all.');
         } else if (!checkBasicFileShare()) {
