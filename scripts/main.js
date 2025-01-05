@@ -44,6 +44,8 @@ async function webShare(filePath) {
         await navigator.share({ files: [file] });
     } catch (error) {
         console.error('Error sharing:', error);
-        alert('Sharing not supported or failed: ' + error.message);
+        if (error.name !== 'AbortError') {
+            alert('Sharing not supported or failed: ' + error.message);
+        }
     }
 } 
